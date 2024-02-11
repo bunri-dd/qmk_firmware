@@ -37,10 +37,62 @@ bool caps_word_press_user(uint16_t keycode) {
             return false;  // Deactivate Caps Word.
     }
 }
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        // case ALL_T(KC_COLN):
+        //     if (record->tap.count && record->event.pressed) {
+        //         tap_code16(KC_COLN);
+        //         return false;        // Return false to ignore further processing of key
+        //     }
+        //     break;
+        case ALL_T(KC_COLN):
+            if (record->event.pressed) {
+                if (record->tap.count) {
+                    // Key was tapped
+                    if (get_mods() & MOD_MASK_SHIFT) {
+                        // If Shift is held, unregister Shift, send semicolon, re-register Shift
+                        uint8_t shift_mods = get_mods() & MOD_MASK_SHIFT;
+                        del_mods(shift_mods); // Temporarily unregister Shift
+                        tap_code(KC_SCLN);    // Send semicolon
+                        set_mods(shift_mods); // Re-register Shift
+                    } else {
+                        // No Shift, send colon
+                        tap_code16(KC_COLN);  // Send colon
+                    }
+                    return false; // Skip all further processing of this key
+                }
+            }
+            break;
+        case LCMD_T(KC_LCBR):
+            if (record->tap.count && record->event.pressed) {
+                tap_code16(KC_LCBR);
+                return false;        // Return false to ignore further processing of key
+            }
+            break;
+        case LSFT_T(KC_LPRN):
+            if (record->tap.count && record->event.pressed) {
+                tap_code16(KC_LPRN);
+                return false;        // Return false to ignore further processing of key
+            }
+            break;
+        case LCMD_T(KC_RCBR):
+            if (record->tap.count && record->event.pressed) {
+                tap_code16(KC_RCBR);
+                return false;        // Return false to ignore further processing of key
+            }
+            break;
+        case LSFT_T(KC_RPRN):
+            if (record->tap.count && record->event.pressed) {
+                tap_code16(KC_RPRN);
+                return false;        // Return false to ignore further processing of key
+            }
+            break;
+    }
+    return true;
+}
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-    // base layer
-	[0] = LAYOUT_split_3x5_2(
+	[0] = LAYOUT_split_3x5_2(           // base layer
         KC_F, KC_L, KC_H, KC_V, KC_Z,
         KC_QUOTE, KC_W, KC_U, KC_O, KC_Y,
 
@@ -50,69 +102,64 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_X, KC_J, KC_B, KC_M, KC_Q,
         KC_P, KC_G, KC_COMMA, KC_DOT, KC_SLSH,
 
-        LT(1,KC_SPC), KC_TAB,    // N
-        KC_ENT, LT(3,KC_BSPC)),  // F/NS
-    // nav layer
-	[1] = LAYOUT_split_3x5_2(
+        LT(1,KC_SPC), KC_TAB,     // N/M
+        KC_ENT, LT(3,KC_BSPC)),         // F/NS
+	[1] = LAYOUT_split_3x5_2(           // nav layer
         KC_MPRV, KC_VOLD, KC_MPLY, KC_VOLU, KC_MNXT,
-        KC_CAPS, KC_HOME, KC_INS, KC_END, KC_PGUP,
+        KC_MUTE,   DM_PLY1, DM_PLY2,RSFT_T(KC_INT5), KC_TRNS,
 
         KC_LCMD, KC_LALT, KC_LSFT, KC_LCTL, KC_HYPR,
-        KC_APP, KC_LEFT, KC_UP, KC_RGHT, KC_PGDN,
+        KC_APP, KC_LEFT, KC_DOWN,  KC_UP,   KC_RGHT,
 
-        KC_MUTE, KC_BRID, KC_BRIU, QK_REP, KC_PSCR,
-        KC_ESC, DM_PLY1, KC_DOWN, DM_PLY2, RSFT_T(KC_INT5),
+        KC_BRID, KC_BRIU, KC_HOME, KC_PGDN, KC_PSCR,
+        KC_INS, KC_PGUP, KC_END, KC_CAPS, KC_ESC,
 
         KC_TRNS, KC_TRNS,
-        KC_TRNS, LT(2,KC_DEL)),  // M
-    // mouse layer
-	[2] = LAYOUT_split_3x5_2(
-        KC_TRNS, KC_ACL1, KC_ACL0, KC_ACL2, KC_TRNS,
-        KC_TRNS, KC_WH_L, KC_BTN3, KC_WH_R, KC_WH_U,
-
-        KC_LCMD, KC_LALT, KC_LSFT, KC_LCTL, KC_HYPR,
-        KC_TRNS, KC_MS_L, KC_MS_U, KC_MS_R, KC_WH_D,
-
+        QK_REP, LT(2,KC_DEL)),               // M
+	[2] = LAYOUT_split_3x5_2(           // mouse layer
+        KC_TRNS, KC_ACL1, KC_ACL0, KC_ACL2, KC_BTN3,
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-        KC_TRNS, KC_BTN4, KC_MS_D, KC_BTN5, KC_TRNS,
+
+        KC_LCMD, KC_LALT, KC_LSFT, KC_LCTL, KC_BTN4,
+        KC_BTN5, KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R,
+
+        KC_TRNS, KC_TRNS, KC_WH_L, KC_WH_D, KC_TRNS,
+        KC_TRNS, KC_WH_U, KC_WH_R, KC_TRNS, KC_TRNS,
 
         KC_BTN1, KC_BTN2,
         KC_TRNS, KC_TRNS),
-    // symbols layer
-	[3] = LAYOUT_split_3x5_2(
+	[3] = LAYOUT_split_3x5_2(           // symbols layer
         KC_7, KC_5, KC_3, KC_1, KC_9,
         KC_0, KC_2, KC_4, KC_6, KC_8,
 
-        KC_LCMD, KC_LALT, KC_LSFT, KC_LCTL, KC_SCLN,
-        KC_COLN, KC_LCTL, KC_LSFT, KC_LALT, KC_LCMD,
+        LCMD_T(KC_LCBR), LALT_T(KC_LBRC), LSFT_T(KC_LPRN), LCTL_T(KC_MINS), ALL_T(KC_BSLS),
+        ALL_T(KC_COLN), LCTL_T(KC_EQL), LSFT_T(KC_RPRN), LALT_T(KC_RBRC), LCMD_T(KC_RCBR),
 
-        KC_LCBR, KC_LBRC, KC_LPRN, KC_MINS, KC_BSLS,
-        KC_GRV, KC_EQL, KC_RPRN, KC_RBRC, KC_RCBR,
+        KC_AMPR, KC_PERC, KC_HASH, KC_EXLM,KC_GRV,
+        KC_TILD, KC_AT, KC_DLR, KC_CIRC , KC_ASTR,
 
-        LT(4,KC_TRNS), KC_TRNS,
+        LT(4,KC_SPC), KC_TRNS,
         KC_TRNS, KC_TRNS),
-    // F keys layer
-	[4] = LAYOUT_split_3x5_2(
+	[4] = LAYOUT_split_3x5_2(           // F keys layer
         KC_F7, KC_F5, KC_F3, KC_F1, KC_F9,
         KC_F10, KC_F2, KC_F4, KC_F6, KC_F8,
 
         KC_LCMD, KC_LALT, KC_LSFT, KC_LCTL, KC_HYPR,
         KC_HYPR, KC_LCTL, KC_LSFT, KC_LALT, KC_LCMD,
 
-        TG(5),   KC_TRNS, AC_TOGG, KC_F11, KC_TRNS,
+        KC_TRNS,   KC_TRNS, AC_TOGG, KC_F11, TG(5),
         KC_TRNS, KC_F12,  DT_PRNT, DT_UP,  DT_DOWN,
 
         KC_TRNS, QK_BOOT,
         QK_BOOT, KC_TRNS),
-    // numpad layer
-	[5] = LAYOUT_split_3x5_2(
+	[5] = LAYOUT_split_3x5_2(           // numpad layer
         KC_TRNS, KC_7,    KC_8,    KC_9,    KC_TRNS,
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
 
-        KC_0,    KC_1,    KC_2,    KC_3,    KC_TRNS,
+        KC_0,    KC_4,    KC_5,    KC_6,    KC_TRNS,
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
 
-        TG(5),   KC_4,    KC_5,    KC_6,    KC_TRNS,
+        KC_TRNS,   KC_1,    KC_2,    KC_3,    TG(5),
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
 
         KC_TRNS, KC_TRNS,
