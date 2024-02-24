@@ -20,6 +20,7 @@ bool caps_word_press_user(uint16_t keycode) {
     switch (keycode) {
         // Keycodes that continue Caps Word, with shift applied.
         case KC_A ... KC_Z:
+        case KC_MINS:  // -
             add_weak_mods(MOD_BIT(KC_LSFT));  // Apply shift to next key.
             return true;
 
@@ -27,15 +28,15 @@ bool caps_word_press_user(uint16_t keycode) {
         case KC_1 ... KC_0:
         case KC_BSPC:
         case KC_DEL:
-        case KC_UNDS:
-        case KC_LBRC:  // [
-        case KC_RBRC:  // ]
-        case KC_MINS:  // -
-        case KC_EQL:   // =
-        case KC_BSLS:  // \ char
-        case KC_GRV:   // `
-        case KC_SCLN:  // ;
-        case KC_QUOT:  // '
+        case KC_UNDS:  // _
+        // case KC_LBRC:  // [
+        // case KC_RBRC:  // ]
+        // case KC_MINS:  // -
+        // case KC_EQL:   // =
+        // case KC_BSLS:  // \ char
+        // case KC_GRV:   // `
+        // case KC_SCLN:  // ;
+        // case KC_QUOT:  // '
             return true;
 
         default:
@@ -157,7 +158,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_ENT, LT(3,KC_BSPC)),         // F/NS
 	[1] = LAYOUT_split_3x5_2(           // nav layer
         KC_MPRV, KC_VOLD, KC_MPLY, KC_VOLU, KC_MNXT,
-        KC_MUTE,   DM_PLY1, DM_PLY2,RSFT_T(KC_INT5), KC_TRNS,
+        KC_MUTE,   DM_PLY1, DM_PLY2,RSFT_T(KC_INT5), KC_INT2,
 
         KC_LCMD, KC_LALT, KC_LSFT, KC_LCTL, KC_HYPR,
         KC_APP, KC_LEFT, KC_DOWN,  KC_UP,   KC_RGHT,
@@ -183,8 +184,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_1, KC_2, KC_3, KC_4, KC_5,
         KC_6, KC_7, KC_8, KC_9, KC_0,
 
-        LCMD_T(KC_LCBR), LALT_T(KC_LPRN), LSFT_T(KC_LBRC), LCTL_T(KC_MINS), HYPR_SCLN,
-        HYPR_COLN, LCTL_T(KC_EQL), LSFT_T(KC_RBRC), LALT_T(KC_RPRN), LCMD_T(KC_RCBR),
+        // LCMD_T(KC_LCBR), LALT_T(KC_LPRN), LSFT_T(KC_LBRC), LCTL_T(KC_MINS), HYPR_SCLN,
+        // HYPR_COLN, LCTL_T(KC_EQL), LSFT_T(KC_RBRC), LALT_T(KC_RPRN), LCMD_T(KC_RCBR),
+        LCMD_T(KC_LCBR), LALT_T(KC_LPRN), LSFT_T(KC_LBRC), LCTL_T(KC_MINS), KC_SCLN,
+        KC_COLN, LCTL_T(KC_EQL), LSFT_T(KC_RBRC), LALT_T(KC_RPRN), LCMD_T(KC_RCBR),
 
         KC_EXLM, KC_AT,  KC_HASH, KC_DLR, KC_PERC,
         KC_CIRC ,KC_AMPR, KC_ASTR, KC_GRV,KC_BSLS,
