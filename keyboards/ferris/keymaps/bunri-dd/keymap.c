@@ -121,7 +121,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 return false;        // Return false to ignore further processing of key
             }
             break;
-        case LALT_T(KC_LPRN):
+        case LSFT_T(KC_LPRN):
             if (record->tap.count && record->event.pressed) {
                 tap_code16(KC_LPRN);
                 return false;        // Return false to ignore further processing of key
@@ -133,7 +133,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 return false;        // Return false to ignore further processing of key
             }
             break;
-        case LALT_T(KC_RPRN):
+        case LSFT_T(KC_RPRN):
             if (record->tap.count && record->event.pressed) {
                 tap_code16(KC_RPRN);
                 return false;        // Return false to ignore further processing of key
@@ -186,8 +186,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
         // LCMD_T(KC_LCBR), LALT_T(KC_LPRN), LSFT_T(KC_LBRC), LCTL_T(KC_MINS), HYPR_SCLN,
         // HYPR_COLN, LCTL_T(KC_EQL), LSFT_T(KC_RBRC), LALT_T(KC_RPRN), LCMD_T(KC_RCBR),
-        LCMD_T(KC_LCBR), LALT_T(KC_LPRN), LSFT_T(KC_LBRC), LCTL_T(KC_MINS), KC_SCLN,
-        KC_COLN, LCTL_T(KC_EQL), LSFT_T(KC_RBRC), LALT_T(KC_RPRN), LCMD_T(KC_RCBR),
+        LCMD_T(KC_LCBR), LALT_T(KC_LBRC), LSFT_T(KC_LPRN), LCTL_T(KC_MINS), KC_SCLN,
+        KC_COLN, LCTL_T(KC_EQL), LSFT_T(KC_RPRN), LALT_T(KC_RBRC), LCMD_T(KC_RCBR),
 
         KC_EXLM, KC_AT,  KC_HASH, KC_DLR, KC_PERC,
         KC_CIRC ,KC_AMPR, KC_ASTR, KC_GRV,KC_BSLS,
